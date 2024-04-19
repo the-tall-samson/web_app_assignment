@@ -12,11 +12,13 @@ Run the following inside /web_app_assignment in a terminal:
 
 ## App Setup
 
-Run the following inside /web_app_assignment in a terminal to setup the database for users and products:
+1. Run the following inside /web_app_assignment in a terminal to setup the database for users and products:
 
-```bash
-  python3 populate_db.py 
-```
+    ```bash
+    python3 populate_db.py 
+    ```
+
+2. Modify the SECRET_KEY in app/__ init __.py to a randomly generated 16-character secret
 
 ## Run App (Server)
 
