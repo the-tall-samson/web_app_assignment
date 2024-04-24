@@ -17,13 +17,18 @@ def get_all_products():
 
 
 def add_product(name, price):
-    existing_product = Product.query.filter_by(name=name).first()
-    if existing_product:
-        raise ValueError('Product already exists.')
-    new_product = Product(name=name, price=price)
-    db.session.add(new_product)
-    db.session.commit()
-    return {'id': new_product.id, 'name': new_product.name, 'price': new_product.price}
+    try:
+        existing_product = Product.query.filter_by(name=name).first()
+        if existing_product:
+            raise ValueError('Product already exists.')
+        new_product = Product(name=name, price=price)
+        db.session.add(new_product)
+        db.session.commit()
+        return {'id': new_product.id, 'name': new_product.name, 'price': new_product.price}
+    except SQLAlchemyError:
+        db.session.rollback()
+        error_message = "Database error occurred, product creation failed."
+        return {'error': error_message}, 500
 
 
 def get_product_by_id(product_id):
