@@ -1,7 +1,7 @@
 import jwt
 from . import SECRET_KEY
 from flask import jsonify, request
-from jwt import DecodeError
+from jwt import DecodeError, ExpiredSignatureError
 from functools import wraps
 from datetime import datetime, timedelta
 from app.models import User
@@ -28,7 +28,7 @@ def token_required(roles):
                 user = User.query.filter_by(username=username).first()
                 if not user or user.role not in roles:
                     return jsonify({'message': 'Unauthorized access.'}), 403
-            except DecodeError as e:
+            except (DecodeError, ExpiredSignatureError):
                 return jsonify({'message': 'Authentication unsuccessful.'}), 401
             return func(*args, **kwargs)
         return wrapper
